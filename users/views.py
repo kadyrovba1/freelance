@@ -1,27 +1,39 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, get_user_model
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer, LoginSerializer
 
 
 # Create your views here.
+User = get_user_model()
+
 class UserCreate(generics.CreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
 class LoginView(APIView):
+    permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
-    permission_classes = ()
 
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(email=email, password=password)
-        if user:
-            return Response({'token': user.auth_token.key})
-        else:
-            return Response({'error: "Wrong Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = authenticate(request, **serializer.validated_data)
+            if user:
+                login(request, user)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
