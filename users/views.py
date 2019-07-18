@@ -5,8 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserSerializer, LoginSerializer
-
+from .serializers import *
 
 # Create your views here.
 User = get_user_model()
@@ -14,6 +13,8 @@ User = get_user_model()
 class UserCreate(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
+
+
 
 class LoginView(APIView):
     permission_classes = (AllowAny,)
@@ -28,12 +29,17 @@ class LoginView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
+
+
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
+

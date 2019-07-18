@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import User
+from .models import User, Transaction
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,4 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password')
+

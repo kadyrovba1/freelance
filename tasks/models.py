@@ -12,12 +12,9 @@ class Task(models.Model):
     executor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='executor')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default='', related_name='task')
     ready = models.BooleanField(default=False)
-    accept = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = 'task'
-        verbose_name_plural = 'tasks'
+        orderding = ['-created_time']
 
     def __str__(self):
-        return self.title
-
+        return '{}-{}'.format(self.title, self.price)
