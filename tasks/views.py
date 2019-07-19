@@ -4,13 +4,24 @@ from .models import Task
 from .serializers import *
 
 
-class TaskCreateView(generics.CreateAPIView):
+class TaskListView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskCreateDetailSerializer
+    serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
-class TaskListView(generics.ListAPIView):
+
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskListSerializer
+    serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
+
+class OrderCreate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_update(self, serializer):
+        serializer.save(executor=self.request.user)

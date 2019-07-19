@@ -19,4 +19,4 @@ class User(AbstractUser):
     balance = models.DecimalField(decimal_places=2, max_digits=7, default=0)
 
     def __str__(self):
-        return self.email
+        return self.username

@@ -14,7 +14,7 @@ class Task(models.Model):
     ready = models.BooleanField(default=False)
 
     class Meta:
-        orderding = ['-created_time']
+        ordering = ['-created_time']
 
     def __str__(self):
         return '{}-{}'.format(self.title, self.price)
