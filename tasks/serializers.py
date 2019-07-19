@@ -16,7 +16,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)
-    descripton = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
     executor = serializers.CharField(read_only=True)
     price = serializers.CharField(read_only=True)
     owner = serializers.CharField(read_only=True)
@@ -49,7 +49,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 'Operation is not correct'
             )
 
-        Task.objects.filter(pk=instance.id.update(**validated_data))
+        Task.objects.filter(pk=instance.id).update(**validated_data)
         task = Task.objects.get(pk=instance.id)
 
         return task
