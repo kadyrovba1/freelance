@@ -16,7 +16,7 @@ class UserTest(APITestCase):
             password='default',
         )
         self.client.save()
-        self.client.login(username='testuser', password='default')
+
 
     def test_create_user(self):
         url = reverse('create_user')
@@ -42,5 +42,6 @@ class UserTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_user_list(self):
+        self.client.login(username='testuser', password='default')
         response = self.client.get(reverse('user_list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
