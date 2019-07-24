@@ -39,7 +39,7 @@ class UserTest(APITestCase):
         }
 
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_user_list(self):
         response = self.client.get(reverse('user_list'))

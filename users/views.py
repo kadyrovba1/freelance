@@ -26,7 +26,7 @@ class LoginView(APIView):
             user = authenticate(request, **serializer.validated_data)
             if user:
                 login(request, user)
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_302_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
